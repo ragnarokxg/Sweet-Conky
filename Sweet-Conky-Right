@@ -1,116 +1,113 @@
 conky.config = {
---#####################
--- - Conky settings - #
---#####################
-	update_interval = 1,
-	total_run_times = 0,
-	net_avg_samples = 1,
-	cpu_avg_samples = 1,
+--#############################
+--#    - Conky  Behavior -    #
+--#############################
+    out_to_x = false,
+    out_to_wayland = true,
+    update_interval = 1,
+    total_run_times = 0,
+    cpu_avg_samples = 1,
+    net_avg_samples = 1,
 
-	imlib_cache_size = 0,
-	double_buffer = true,
-	no_buffers = true,
+    imlib_cache_size = 0,
+    double_buffer = true,
+    no_buffers = true,
 
---####################
--- - Text settings - #
---####################
-	use_xft = true,
-	font = 'Fira Book:normal:size=9',
-	override_utf8_locale = true,
-	text_buffer_size = 2048,
+--#############################
+--#     - Text Settings -     #
+--#############################
+    use_xft = true,
+    font = 'Fira Book:normal:size=9',
+    override_utf8_locale = true,
+    text_buffer_size = 2048,
 
---############################
--- - Window specifications - #
---############################
-	own_window = true,
-	own_window_type = 'normal',
-	own_window_transparent = false,
-	own_window_hints = 'undecorated,below,sticky,skip_taskbar,skip_pager',
-	own_window_argb_visual = true,
-	own_window_argb_value = 178,
-	own_window_colour = '#000000',
-	minimum_width = 320, minimum_height = 320,
+--#############################
+--# - Window Specifications - #
+--#############################
+    own_window = true,
+    own_window_type = 'desktop',
+    own_window_transparent = false,
+    own_window_argb_visual = true,
+    own_window_argb_value = 178,
+    own_window_colour = '#000000',
+    minimum_width = 300, minimum_height = 300,
 
-	alignment = 'middle_right',
-	gap_x = 20,
-	gap_y = 20,
+    alignment = 'middle_left',
+    gap_x = 120,
+    gap_y = 0,
 
---########################
--- - Graphics settings - #
---########################
-	draw_shades = false,
+--#############################
+--#   - Graphics Settings -   #
+--#############################
+    draw_shades = false,
 
-	default_color = '#ffffff',
+--#############################
+--#    - Color  Settings -    #
+--#############################
+	default_color = '#FFFFFF',
 	default_shade_color = '#000000',
-	color1 = '#c6396b',
-	color2 = '#fc8c3b',
-	color3 = '#f9e30f',
-	color4 = '#4291e2',
+	color1 = '#C6396B',
+	color2 = '#FC8C3B',
+	color3 = '#F9E30F',
+	color4 = '#4291E2',
 	color5 = '#161925',
-	color6 = '#3bf4bb',
-
+	color6 = '#3BF4BB',
 };
 
 conky.text = [[
 #--------------------------------------------------------------------------------------------------------------------------------
-#                                                   Date/Time
+#                                                   Date/Time
 #--------------------------------------------------------------------------------------------------------------------------------
-${color4}${font ConkySymbols:size=14}a${font} Date/Time» $hr ${color}
+${color2}${font ConkySymbols:size=14}a${font} Date/Time» $hr
 
-${goto 10}Day :${color2}${alignr 10}${time %A}${color}
-${goto 10}Date:${color2}${alignr 10}${time %d %B %Y}${color}
-${goto 10}Time:${color2}${alignr 10}${time %I}:${time %M %p}${color}
+${offset 10}${color1}Day:  ${color2}${alignr 10}${time %A}
+${offset 10}${color1}Date: ${color2}${alignr 10}${time %d %B %Y}
+${offset 10}${color1}Time: ${color2}${alignr 10}${time %I}:${time %M %p}
 
-#--------------------------------------------------------------------------------------------------------------------------------
-#                                                   Network
 #-------------------------------------------------------------------------------------------------------------------------------
-${color4}${font ConkySymbols:size=14}b${font} Network» $hr${color}
+#                                                   GPU
+#-------------------------------------------------------------------------------------------------------------------------------
+${color2}${font ConkySymbols:size=14}f${font} G P U» $hr
 
-${goto 10}Host:${color2}${alignr 10}${exec hostname}${color}
-${goto 10}Network SSID: ${color2}${alignr 10}${wireless_essid wlp3s0}${color}
-${goto 10}Signal:${alignr 10}${color6}${wireless_link_qual_perc wlp3s0} %${color}
-
-${color4}${goto 10}${stippled_hr}${color}
-
-${goto 10}Internal IP: ${color2}${alignr 10}${addr wlp3s0}${color}
-${goto 10}External IP: ${color2}${alignr 10}${exec curl ipinfo.io/ip}${color}
-
-${color4}${goto 10}${stippled_hr}${color}
-
-${goto 10}Upload Speed:${alignr 10}${color6}${upspeed wlp3s0}${color} ${color5}${upspeedgraph wlp3s0 10,120 fc8c3b c6396b -t}${color}
-${goto 10}Down Speed:${alignr 10}${color6}${downspeed wlp3s0}${color} ${color5}${downspeedgraph wlp3s0 10,120 fc8c3b c6396b -t}${color}
-${voffset -5}
-
-${goto 10}Total Up:${goto 80}${color2}${totalup wlp3s0} ${color}${alignr 20}Total Down:${alignr 10}${color2}${totaldown wlp3s0}
+${offset 10}${color1}Graphics cards:  ${color2}${alignr 10}${exec hwinfo --gfxcard | grep "Device" | awk -F '"' 'NR==1{print $2}'}
+${offset 10}${color1}Mesa Driver:     ${color2}${alignr 10}${execi 600 glxinfo | grep "OpenGL version string" | awk 'NR==1{print $8}' | cut -c 1-8}
+${offset 10}${color1}Display Server:  ${color2}${alignr 10}${exec echo $XDG_SESSION_TYPE}
 
 #--------------------------------------------------------------------------------------------------------------------------------
-#                                                   Weather
-#--------------------------------------------------------------------------------------------------------------------------------
-${color4}${font ConkySymbols:size=14}h${font} Weather» $hr ${color}
-${execi 600 bash $HOME/.conky/Sweet-Conky-GNOME/accuweather/acc_RSS}
+#                                                   Network
+#-------------------------------------------------------------------------------------------------------------------------------
+${color2}${font ConkySymbols:size=14}b${font} Network» $hr
 
-${goto 10}${exec awk 'NR==1 {print $1}' $HOME/.conky/Sweet-Conky-GNOME/accuweather/weather}${color}
-${font conkyweather:size=30}${exec awk 'NR==2 {print}' $HOME/.conky/Sweet-Conky-GNOME/accuweather/weather}${font}
-${goto 75}${voffset -25}${color2}${exec awk 'NR==1 {print $2,$3,$4,$5}' $HOME/.conky/Sweet-Conky-GNOME/accuweather/weather}${color}
+${offset 10}${color1}Host:         ${color2}${alignr 10}${exec hostname}
+${offset 10}${color1}Network SSID: ${color2}${alignr 10}${wireless_essid wlp3s0}
+${offset 10}${color1}Signal:       ${color2}${alignr 10}${wireless_link_qual_perc wlp3s0} %
 
+${offset 10}${color2}$hr
 
-${color4}${goto 10}${stippled_hr}${color}
+${offset 10}${color1}Internal IP: ${color2}${alignr 10}${addr wlp3s0}
+${offset 10}${color1}External IP: ${color2}${alignr 10}${exec curl ipinfo.io/ip}
 
-${goto 10}${exec awk 'NR==3 {print}' $HOME/.conky/Sweet-Conky-GNOME/accuweather/weather}
-${font conkyweather:size=30}${exec awk 'NR==5 {print}' $HOME/.conky/Sweet-Conky-GNOME/accuweather/weather}${font}
-${goto 75}${voffset -25}${color2}${exec awk 'NR==4 {print $1,$2 $3}' $HOME/.conky/Sweet-Conky-GNOME/accuweather/weather}
-${goto 75}${color2}${exec awk 'NR==4 {print $4,$5 $6}' $HOME/.conky/Sweet-Conky-GNOME/accuweather/weather}${color}
-${goto 75}${color2}${exec awk 'NR==4 {print $7,$8,$9,$10}' $HOME/.conky/Sweet-Conky-GNOME/accuweather/weather}${color}
+${offset 10}${color2}$hr
 
-${color4}${goto 10}${stippled_hr}${color}
+${offset 10}${color1}Upload Speed: ${color2}${alignr 10}${upspeed wlp3s0} ${upspeedgraph wlp3s0 10,120 6FC3DF 6FC3DF -t}
+${offset 10}${color1}Down Speed:   ${color2}${alignr 10}${downspeed wlp3s0} ${downspeedgraph wlp3s0 10,120 6FC3DF 6FC3DF -t}
 
-${goto 10}${exec awk 'NR==6 {print}' $HOME/.conky/Sweet-Conky-GNOME/accuweather/weather}
-${font conkyweather:size=30}${exec awk 'NR==8 {print}' $HOME/.conky/Sweet-Conky-GNOME/accuweather/weather}${color2}${font}
-${goto 75}${voffset -25}${color2}${exec awk 'NR==7 {print $1,$2 $3}' $HOME/.conky/Sweet-Conky-GNOME/accuweather/weather}
-${goto 75}${color2}${exec awk 'NR==7 {print $4,$5 $6}' $HOME/.conky/Sweet-Conky-GNOME/accuweather/weather}
-${goto 75}${color2}${exec awk 'NR==7 {print $7,$8,$9,$10}' $HOME/.conky/Sweet-Conky-GNOME/accuweather/weather}${color}
+${offset 10}${color1}Total Up:   ${alignr}${color2}${totalup wlp3s0}${color}
+${offset 10}${color1}Total Down: ${alignr}${color2}${totaldown wlp3s0}${color}
 
-${color4}${goto 10}${stippled_hr}${color}
+#-------------------------------------------------------------------------------------------------------------------------------
+#                                                   Storage
+#-------------------------------------------------------------------------------------------------------------------------------
+${color2}${font ConkySymbols:size=14}k${font} S T O R A G E» $hr
 
-#--------------------------------------------------------------------------------------------------------------------------------
+${offset 10}${color1}root: (${fs_type /}) ${color2}${alignr}${fs_free /} ${fs_used /}
+${offset 10}${color1}${fs_size /} ${color2}${fs_bar 4 /}
+${offset 10}${color1}home: (${fs_type /home}) ${color2}${alignr}${fs_free /home/} ${fs_used /home/}
+${offset 10}${color1}${fs_size /home/} ${color2}${fs_bar 4 /home/}
+
+${offset 10}${color1}Disk I/O Read:  ${color2}${alignr 10}${diskio_read}${color}${diskiograph_read 10,120 ADFF2F 32CD32 750}
+${offset 10}${color1}Disk I/O Write: ${color2}${alignr 10}${diskio_write}${color}${diskiograph_write 10,120 FF0000 8B0000 750}
+
+${offset 10}${color1}$hr
+
 ]];
